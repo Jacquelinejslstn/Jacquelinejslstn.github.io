@@ -49,73 +49,75 @@
               <h2>Voice of Covenant</h2>
               <p class="lead">Data kehadiran member VC</p>
             </div>
-      
+            <button class="btn btn-md btn-primary" v-on:click="resetForm()">Buat data baru</button><br><br>
               <div class="col-md-12">
                 <table class="table table-striped">
                     <tr>
                         <th>ID</th>
-                        <th>Nama Anggota</th>
+                        <th>Nama</th>
                         <th>Status Absensi</th>
                         <th>Komentar</th>
                         <th>Tanggal Absensi</th>
                         <th>Jenis Kegiatan</th>
-                        <th></th>
+                        <th>Edit</th>
+                        <th>Hapus</th>
                     </tr>
                     <tr v-for="absensi in absensis">
-                        <td>{{ absensi.idAbsensi }}</td>
+                        <td>{{ absensi.id }}</td>
                         <td>{{ absensi.namaAbsensi }}</td>
                         <td>{{ absensi.statusAbsensi }}</td>
                         <td>{{ absensi.komentar }}</td>
                         <td>{{ absensi.tanggalAbsensi }}</td>
                         <td>{{ absensi.jenisKegiatan }}</td>
                         <td><button class="btn btn-md btn-warning" v-on:click="getEdit(absensi)">Edit</button></td>
+                        <td><button class="btn btn-danger" v-on:click="getDelete(absensi)">Hapus</button></td>
                     </li>
                 </table>
 
                 <div v-if="message" class="alert alert-success" role="alert">
                     {{ message }}
-                </div>
-                
+                </div>               
                 <h4 class="mb-3">Data Absensi Anggota</h4>
                 <form class="needs-validation" novalidate>
                   <div class="row">
                     <div class="col-md-6 mb-3">
-                      <label for="namaAbsensi">Nama Anggota</label>
+                      <label for="namaAbsensi">Nama</label>
                       <input  v-model="namaAbsensi" type="text" class="form-control" id="namaAbsensi" placeholder="" value="" required>
-                      <div class="invalid-feedback">
-                        Harap isi nama anggota.
-                      </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="statusAbsensi">Status Absensi</label>
-                        <select class="form-control" id="statusAbsensi" name="statusAbsensi" v-model="statusAbsensi">
+                        <select class="form-control" id="statusAbsensi" name="statusAbsensi" v-model="statusAbsensi" value="">
                             <option value="Hadir" selected>Hadir</option>
                             <option value="Absen">Absen</option>
                             <option value="Izin">Izin</option>
+                            <option value="Late">Late</option>
                         </select>
                     </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="komentar">Komentar</label>
+                      <textarea  v-model="komentar" type="textarea" class="form-control" id="komentar" placeholder="" value="" required></textarea>
+                      <div class="invalid-feedback">
+                        Harap isi komentar.
+                      </div>
+                  </div>
                     <div class="col-md-6 mb-3">
                         <label for="tanggalAbsensi">Tanggal Absensi</label> <br>     
                         <input type="date" name="tanggalAbsensi" id="tanggalAbsensi" v-model="tanggalAbsensi" placeholder="dd-mm-yyyy" value="" min="2022-01-01" max="2022-12-31">
                     </div>
                     <div class="col-md-6 mb-3">
-                      <label for="jenisKegiatan">jenisKegiatan</label>
-                      <input  v-model="jenisKegiatan" type="text" class="form-control" id="janisKegiatan" placeholder="" value="" required>
+                      <label for="jenisKegiatan">Jenis Kegiatan</label>
+                      <input  v-model="jenisKegiatan" type="text" class="form-control" id="jenisKegiatan" placeholder="" value="" required>
                       <div class="invalid-feedback">
                         Harap isi jenis Kegiatan.
                       </div>
                   </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="komentar">Komentar</label>
-                        <textarea  v-model="komentar" type="textarea" class="form-control" id="janisKegiatan" placeholder="" value="" required></textarea>
-                        <div class="invalid-feedback">
-                          Harap isi komentar.
-                        </div>
-                    </div>
                 </div>
               </div>
                   <hr class="mb-4">
-                  <button v-if="editMode" v-on:click="updateAbsensi" class="btn btn-warning btn-lg btn-block" type="submit">Simpan Absensi</button>
+                  <button v-if="!editMode && !deleteMode" v-on:click="createAbsensi" class="btn btn-warning btn-md btn-block" type="simpan">Simpan Data</button>
+                  <button v-if="editMode" v-on:click="updateAbsensi" class="btn btn-warning btn-lg btn-block" type="submit">Update Data</button>
+                  <button v-if="deleteMode" v-on:click="deleteAbsensi
+                  " class="btn btn-danger btn-lg btn-block" type="submit">Hapus Data</button>
                 </form>
               </div>
             </div>
@@ -138,12 +140,14 @@
                 message: null,
                 absensis:[],
                 absensiIdEdit: null,
+                absensiIdDelete: null,
+                deleteMode: false,
                 editMode: false,
                 namaAbsensi: '',
                 statusAbsensi: '',
+                komentar: '',
                 tanggalAbsensi: '',
                 jenisKegiatan: '',
-                komentar: ''
             },
             mounted: function() {
                 this.getAbsensi();
@@ -159,35 +163,63 @@
                             console.log(error);
                         });
                 },
+                createAbsensi: function(){
+                    axios.post('https://6220b66eafd560ea699abb80.mockapi.io/absensi/', {
+                      namaAbsensi: this.namaAbsensi,
+                      statusAbsensi: this.statusAbsensi,
+                      komentar: this.komentar,
+                      tanggalAbsensi: this.tanggalAbsensi,
+                      jenisKegiatan: this.jenisKegiatan,
+                    })
+                    .then(response => {
+                            this.getAbsensi();
+                            this.message = "Datamu sudah tersimpan";
+                            console.log(response);
+                    })
+                    .catch(error => {
+                            console.log(error);
+                    });
+                },
                 resetForm: function () {
                     this.message = null;
                     this.editMode = false;
                     this.deleteMode = false;
                     this.anggotaIdEdit = null;
                     this.namaAbsensi = null;
-                    this.posisiSuara = null;
                     this.statusAbsensi = null;
-                    this.jurusan = null;
+                    this.komentar = null;
                     this.tanggalAbsensi = null;
-                    this.janisKegiatan = null;
+                    this.jenisKegiatan = null;
                 },
                 getEdit: function (absensi) {
                     this.message = null;
                     this.editMode = true;
-                    this.absensiIdEdit = absensi.idAbsensi;
-                    this.komentar = absensi.komentar
-                    this.namaAbsensi = absensi.namaAnggota;
+                    this.deleteMode = false;
+                    this.absensiIdEdit = absensi.id;
+                    this.namaAbsensi = absensi.namaAbsensi
                     this.statusAbsensi = absensi.statusAbsensi;
+                    this.komentar = absensi.komentar;
                     this.tanggalAbsensi = absensi.tanggalAbsensi;
                     this.jenisKegiatan = absensi.jenisKegiatan;
                 },
-
+                getDelete: function (absensi) {
+                    this.message = null;
+                    this.deleteMode = true;
+                    this.editMode = false;
+                    this.absensiIdDelete = absensi.id;
+                    this.namaAbsensi = absensi.namaAbsensi;
+                    this.statusAbsensi = absensi.statusAbsensi;
+                    this.komentar = absensi.komentar;
+                    this.tanggalAbsensi = absensi.tanggalAbsensi;
+                    this.jenisKegiatan = absensi.jenisKegiatan;
+                },
                 updateAbsensi: function () {
                     axios.put(`https://6220b66eafd560ea699abb80.mockapi.io/absensi/${this.absensiIdEdit}`, {
-                            namaAbsensi: this.namaAbsensi,
-                            statusAbsensi: this.statusAbsensi,
-                            tanggalAbsensi: this.tanggalAbsensi,
-                            komentar: this.komentar,
+                          namaAbsensi: this.namaAbsensi,
+                          statusAbsensi: this.statusAbsensi,
+                          komentar: this.komentar,
+                          tanggalAbsensi: this.tanggalAbsensi,
+                          jenisKegiatan: this.jenisKegiatan,
                         })
                         .then(AuthenticatorAttestationResponse => {
                             // handle success
@@ -198,7 +230,19 @@
                             // handle error
                             console.log(err);
                         })
-                }
+                },
+                deleteAbsensi: function () {                
+                    axios.delete('https://6220b66eafd560ea699abb80.mockapi.io/absensi/' + this.absensiIdDelete)
+                        .then(response => {
+                            // handle success
+                            this.message = "Data sudah terhapus";
+                            this.getAbsensi();
+                        })
+                        .catch(eror => {
+                            // handle error
+                            console.log(eror);
+                        })  
+                }  
             }
         })
     </script>
