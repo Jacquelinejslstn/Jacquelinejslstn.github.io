@@ -13,7 +13,7 @@
 <body>
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
         <!-- Brand -->
-        <img src="VC.png" width="80"  alt="logo vc">
+        <img src="/img/LogoVC.png" width="80"  alt="logo vc">
       
         <!-- Toggler/collapsibe Button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -117,54 +117,45 @@
                     <div class="col-md-6 mb-3">
                         <label for="jurusan">Jurusan</label>
                         <select class="form-control" id="jurusan" name="jurusan" v-model="jurusan">
-                            <option value="Akuntansi">Akuntansi</option>
-                            <option value="Biologi">Biologi</option>
-                            <option value="Farmasi">Farmasi</option>
-                            <option value="Ilmu Filsafat">Ilmu Filsafat</option>
-                            <option value="Ilmu Keperawatan">Ilmu Keperawatan</option>
-                            <option value="Manajemen">Manajemen</option>
-                            <option value="Pendidikan Bahasa Inggris">Pendidikan Bahasa Inggris</option>
-                            <option value="Pendidikan Matematika">Pendidikan Matematika</option>
-                            <option value="Sistem Informasi">Sistem Informasi</option>
-                            <option value="Teknik Informatika">Teknik Informatika</option>         
+                          <option value="Akuntansi">Akuntansi</option>
+                          <option value="Biologi">Biologi</option>
+                          <option value="Farmasi">Farmasi</option>
+                          <option value="Ilmu Filsafat">Ilmu Filsafat</option>
+                          <option value="Ilmu Keperawatan">Ilmu Keperawatan</option>
+                          <option value="Manajemen">Manajemen</option>
+                          <option value="Pendidikan Bahasa Inggris">Pendidikan Bahasa Inggris</option>
+                          <option value="Pendidikan Matematika">Pendidikan Matematika</option>
+                          <option value="Sistem Informasi">Sistem Informasi</option>
+                          <option value="Teknik Informatika">Teknik Informatika</option>         
                         </select>
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label for="tanggalLahir">Tanggal Lahir</label>      
-                        <input type="date" name="tanggalLahir" id="tanggalLahir" v-model="tanggalLahir" placeholder="dd-mm-yyyy" value="" min="1997-01-01" max="2022-12-31">
+                      <label for="tanggalLahir">Tanggal Lahir</label>      
+                      <input type="date" name="tanggalLahir" id="tanggalLahir" v-model="tanggalLahir" placeholder="dd-mm-yyyy" value="" min="1997-01-01" max="2022-12-31">
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label for="noHp">Nomor HP</label>
-                        <input  v-model="noHp" type="text" class="form-control" id="noHp" placeholder="" value="" required>
-                        <div class="invalid-feedback">
-                          Harap isi Nomor HP.
-                        </div>
+                      <label for="noHp">Nomor HP</label>
+                      <input  v-model="noHp" type="text" class="form-control" id="noHp" placeholder="" value="" required>
                     </div>
 
                   <div class="col-md-6 mb-3">
                     <label for="email">Email</label>
                     <input v-model="email" type="email" class="form-control" id="email" placeholder="email@example.com">
-                    <div class="invalid-feedback">
-                      Email harus diisi.
-                    </div>
                   </div>
 
                   <div class="col-md-6 mb-3">
                     <label for="ipk">IPK</label>
                     <input  v-model="ipk" type="text" class="form-control" id="ipk" placeholder="Masukkan IPK semester terakhir" value="" required>
-                    <div class="invalid-feedback">
-                      IPK harus diisi.
-                    </div>
                   </div>
 
                   <div class="col-md-6 mb-3">
                     <label for="jenisKelamin">Jenis Kelamin</label>
-                    <select class="form-control" id="statusAnggota" name="jenisKelamin" v-model="jenisKelamin">
-                        <option value="Perempuan">Perempuan</option>
-                        <option value="Laki-laki">Laki-laki</option>
-                    </select>
+                    <input v-model="jenisKelamin" type="radio" name="jenisKelamin" value="Laki-laki"/>
+                    <label for="Laki-laki">Laki-laki</label>
+                    <input v-model="jenisKelamin" type="radio" name="jenisKelamin" value="Perempuan"/>
+                    <label for="perempuan">Perempuan</label>
                   </div>
                 </div>
               </div>
