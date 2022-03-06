@@ -1,0 +1,7 @@
+body .atas {
+    background-image: url("wall.jpg");
+    background-repeat: no-repeat;
+    background-size: auto;
+    height: 800px;
+    font-size: 8vh;
+}
